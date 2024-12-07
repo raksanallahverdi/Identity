@@ -17,10 +17,10 @@
         </tr>
     </thead>
     <tbody>
-      
-            <tr>
-            @foreach (var user in Model.Users)
+        @foreach (var user in Model.Users)
             {
+            <tr>
+          
                 <td>@user.Email</td>
                 <td>@user.PhoneNumber</td>
                 <td>@user.Country</td>
@@ -33,13 +33,14 @@
 
                 </td>
                 <td class="text-center d-flex justify-content-center">
+                    <a class="btn btn-secondary mx-2" asp-route-id="@user.Id" asp-controller="user" asp-action="Detail"></a>
                     <a class="btn btn-secondary mx-2"  asp-controller="user">✏️</a>
-                    <form method="post" asp-controller="user">
+                    <form method="post" asp-route-id="@user.Id" asp-action="delete" asp-controller="user">
                         <button type="submit" class="btn btn-danger">X</button>
                     </form>
                 </td>
-            }
+            
             </tr>
-        
+            }
     </tbody>
 </table>

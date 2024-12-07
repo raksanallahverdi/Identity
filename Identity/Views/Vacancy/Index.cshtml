@@ -1,11 +1,8 @@
-﻿@{
-    Layout = null;
-}
-<h1>Home</h1>
+﻿Vacancy
 
 @if (User.Identity.IsAuthenticated)
 {
     <p>Welcome,@User.Identity.Name !</p>
-
+   
     <a asp-action="logout" asp-controller="account">Log Out</a>
 }

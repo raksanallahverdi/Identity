@@ -30,6 +30,7 @@ namespace Identity.Areas.Admin.Controllers
                 {
                     users.Add(new UserVM
                     {
+                        Id=user.Id,
                         Email = user.Email,
                         City = user.City,
                         Country = user.Country,
@@ -66,7 +67,7 @@ namespace Identity.Areas.Admin.Controllers
             var user = new User
             {
                 Email = model.Email,
-                UserName=model.Email,
+                UserName = model.Email,
                 City = model.City,
                 Country = model.Country,
                 PhoneNumber = model.PhoneNumber
@@ -78,10 +79,10 @@ namespace Identity.Areas.Admin.Controllers
                     ModelState.AddModelError(string.Empty, error.Description);
                 return View(model);
             }
-            foreach(var roleId in model.RoleIds)
+            foreach (var roleId in model.RoleIds)
             {
-                var role=_roleManager.FindByIdAsync(roleId).Result;
-                if(role is null)
+                var role = _roleManager.FindByIdAsync(roleId).Result;
+                if (role is null)
                 {
                     ModelState.AddModelError("RoleIds", "Role is not exists");
                     return View(model);
@@ -95,6 +96,41 @@ namespace Identity.Areas.Admin.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        [HttpPost]
+        public IActionResult Delete(string id)
+        {
+            var user = _userManager.FindByIdAsync(id).Result;
+            if (user is null) return NotFound();
+
+            var result = _userManager.DeleteAsync(user).Result;
+            if (!result.Succeeded) return NotFound();
+
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpGet]
+        public IActionResult Detail(string id)
+        {
+         
+            var user = _userManager.FindByIdAsync(id).Result;
+            if (user == null) return NotFound();
+
+            var roles = _userManager.GetRolesAsync(user).Result;
+
+           
+            var model = new UserDetailVM
+            {
+                Id = user.Id,
+                Email = user.Email,
+                UserName = user.UserName,
+                City = user.City,
+                Country = user.Country,
+                PhoneNumber = user.PhoneNumber,
+                Roles = roles.ToList()
+            };
+
+            return View(model);
+        }
+
 
     }
 }
