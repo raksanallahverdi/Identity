@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using Identity.Entities;
 using Identity.Data;
+using Identity.Utilities.EmailHandler.Abstract;
+using Identity.Utilities.EmailHandler.Concrete;
 using Microsoft.EntityFrameworkCore;
 using Identity;
+using Identity.Utilities.EmailHandler.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,7 +22,12 @@ builder.Services.AddIdentity<User,IdentityRole>(options =>
     options.User.RequireUniqueEmail=true;
    
 
-}).AddEntityFrameworkStores<AppDbContext>();
+}).AddEntityFrameworkStores<AppDbContext>()
+.AddDefaultTokenProviders();
+
+var emailConfiguration = builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
+builder.Services.AddSingleton(emailConfiguration);
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();
 app.MapControllerRoute(
