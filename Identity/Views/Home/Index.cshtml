@@ -1,11 +1,28 @@
 ﻿@{
     Layout = null;
 }
+
 <h1>Home</h1>
 
-@if (User.Identity.IsAuthenticated)
-{
-    <p>Welcome,@User.Identity.Name !</p>
+<p>Welcome, <b>@User.Identity.Name!</b></p>
 
-    <a asp-action="logout" asp-controller="account">Log Out</a>
+@if (TempData["Message"] != null)
+{
+    <p style="color:green;">@TempData["Message"]</p>
 }
+
+@if (ViewBag.IsSubscribed)
+{
+    <p style="color:blue;">You are subscribed!</p>
+}
+else
+{
+    <form asp-action="Subscribe" asp-controller="Account" method="post">
+        <button style="background-color:orange;margin-bottom:40px;border-radius:8px;padding:3px 12px; display:inline-block;cursor:pointer;">
+            Subscribe
+        </button>
+    </form>
+}
+
+<br />
+<a asp-action="Logout" asp-controller="Account">Log Out</a>

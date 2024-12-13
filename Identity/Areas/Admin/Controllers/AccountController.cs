@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Identity.Entities;
 using Identity.Areas.Admin.Models.Account;
+using Microsoft.EntityFrameworkCore;
+using Identity.Utilities.EmailHandler.Abstract;
+using Identity.Utilities.EmailHandler.Models;
 
 namespace Identity.Areas.Admin.Controllers
 {
@@ -11,13 +14,17 @@ namespace Identity.Areas.Admin.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IEmailService _emailService;
         public AccountController(UserManager<User> userManager,
             SignInManager<User> signInManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+
+          IEmailService emailService)
         {
-            _userManager=userManager;
-            _signInManager=signInManager;
-            _roleManager=roleManager;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _roleManager = roleManager;
+            _emailService = emailService;
 
         }
        [HttpGet]
@@ -54,7 +61,7 @@ namespace Identity.Areas.Admin.Controllers
            
             return RedirectToAction("index","dashboard");           
         }
-        
 
+       
     }
 }

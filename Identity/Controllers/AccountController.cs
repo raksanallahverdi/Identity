@@ -168,7 +168,45 @@ namespace Identity.Controllers
         }
         #endregion
 
+        #region Subscribe
+        [HttpPost]
+        [HttpPost]
+        public async Task<IActionResult> Subscribe()
+        {
+            var user = await _userManager.GetUserAsync(User);
 
+            if (user == null)
+            {
+                TempData["Message"] = "User not found.";
+                return RedirectToAction("index", "home");
+            }
+
+            if (user.IsSubscribed)
+            {
+                TempData["Message"] = "You are already subscribed!";
+                TempData["IsSubscribed"] = true;
+                return RedirectToAction("index", "home");
+            }
+
+            user.IsSubscribed = true;
+            var result = await _userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+            {
+                TempData["Message"] = "Subscription successful!";
+                TempData["IsSubscribed"] = true;
+            }
+            else
+            {
+                TempData["Message"] = "Subscription failed. Please try again.";
+                TempData["IsSubscribed"] = false;
+            }
+
+            return RedirectToAction("index", "home");
+        }
+
+
+        #endregion
 
     }
 }
