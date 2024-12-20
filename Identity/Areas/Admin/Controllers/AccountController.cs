@@ -62,6 +62,29 @@ namespace Identity.Areas.Admin.Controllers
             return RedirectToAction("index","dashboard");           
         }
 
-       
+        [HttpGet]
+        public IActionResult SendDiscountEmail()
+        {
+            // Fetch subscribed users
+            var subscribedUsers = _userManager.Users
+                .Where(u => u.IsSubscribed)
+                .ToList();
+
+            foreach (var user in subscribedUsers)
+            {
+                var message = new Message(
+                    to: new List<string> { user.Email },
+                    subject: "Exclusive Discount Just for You!",
+                    content: "Thank you for subscribing!Enjoy a 20% discount on your next purchase."
+                );
+
+                // Send the email
+                _emailService.SendMessage(message);
+            }
+
+
+            return RedirectToAction("index","dashboard");
+        }
+
     }
 }

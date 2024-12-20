@@ -1,0 +1,41 @@
+﻿@using Identity.ViewModels.Product;
+@model ProductIndexVM
+
+@{
+    Layout = "_Layout";
+}
+
+<nav class="navbar navbar-light bg-light justify-content-between">
+    <a class="navbar-brand">Our Project</a>
+    <form class="form-inline">
+        <i style="color:green;font-size:22px;" class="fa-solid fa-basket-shopping"></i>
+    </form>
+</nav>
+
+<div class="row">
+    @foreach(var product in Model.Products)
+    {
+        <div class="col-4">
+            <div class="card" style="width: 18rem; height:27rem;">
+                <img class="card-img-top" src="@product.PhotoName" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">@product.Name</h5>
+                    <p class="card-text">@product.Description</p>
+                    <p class="card-text">@product.Price</p>
+                    @if (product.StockQuantity > 0)
+                    {
+                        <button data-id="@product.Id" style="cursor:pointer;" class="addToBasket btn-primary">Add To Basket</button>
+                    }
+                    else
+                    {
+                        <p class="text-danger">Out Of Stock</p>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts{
+    <script src="~/assets/js/Product.js"></script>
+}
